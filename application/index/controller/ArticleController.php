@@ -15,6 +15,30 @@ class ArticleController extends Controller
         return $data;
     }
 
+//    添加话题的接口
+    public function addTopic(Request $request){
+        $categoryId = $request->categoryId;
+        $title = $request->title;
+        $topicContent = $request->topicContent;
+        $createdAt = date('Y-m-d h:i:s');
+        $topic = new Article();
+        $topicId = $topic->createTopic($categoryId,$title,$topicContent,$createdAt);
+        if($topicId){
+            echo json_encode([
+              'topicId' => $topicId,
+              'code' => 200,
+              'state' => true,
+              'msg' => '话题发表成功'
+            ]);
+        }else{
+            echo json_encode([
+                'code' => 400,
+                'state' => false,
+                'msg' => '话题发表失败'
+            ]);
+        }
+    }
+
     /**
      * 显示资源列表
      *
