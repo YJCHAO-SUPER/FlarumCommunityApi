@@ -17,12 +17,16 @@ class ArticleController extends Controller
 
 //    添加话题的接口
     public function addTopic(Request $request){
+
+        $userId = $request->jwt->id;
         $categoryId = $request->categoryId;
         $title = $request->title;
         $topicContent = $request->topicContent;
         $createdAt = date('Y-m-d h:i:s');
+//        return $userId;
         $topic = new Article();
-        $topicId = $topic->createTopic($categoryId,$title,$topicContent,$createdAt);
+        $topicId = $topic->createTopic($userId,$categoryId,$title,$topicContent,$createdAt);
+
         if($topicId){
             echo json_encode([
               'topicId' => $topicId,
@@ -37,6 +41,15 @@ class ArticleController extends Controller
                 'msg' => '话题发表失败'
             ]);
         }
+    }
+
+//    根据id获取话题
+    public function getTopicById(Request $request){
+        $topicId = $request->id;
+//        return $topicId;
+        $article = new Article();
+        $data = $article->getArticleById($topicId);
+        return $data;
     }
 
     /**

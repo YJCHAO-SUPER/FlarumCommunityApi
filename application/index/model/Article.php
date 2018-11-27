@@ -23,9 +23,9 @@ class Article extends Model
     }
 
 //    添加话题
-    public function createTopic($categoryId,$title,$topicContent,$createdAt){
+    public function createTopic($userId,$categoryId,$title,$topicContent,$createdAt){
         $topic = new Article([
-            'user_id' => 1,
+            'user_id' => $userId,
             'category_id' => $categoryId,
             'title' => $title,
             'content' => $topicContent,
@@ -34,4 +34,11 @@ class Article extends Model
         $topic->save();
         return $topic->id;
     }
+
+//    根据id获取话题
+    public function getArticleById($topicId){
+        return Article::with(['getUserByArticleId','getCategoryByArticleId'])->where('id',$topicId)->find();
+    }
+
+
 }

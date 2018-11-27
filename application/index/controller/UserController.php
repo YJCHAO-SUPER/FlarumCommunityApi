@@ -31,19 +31,23 @@ class UserController extends Controller
 //        return $userInfo;
         if(password_verify($password,$userInfo['password'])){
             $key = 'abcd1234';
+            $now = time();
+//            return $now;
+            $expire = $now + 7*24*60*60;
             $data = [
+              'iat' => $now,
+              'exp' => $expire,
               'id' => $userInfo['id'],
               'name' => $userInfo['name'],
               'avatar' => $userInfo['avatar'],
               'email' => $userInfo['email'],
-              'password' => $userInfo['password'],
             ];
 //            生成令牌
-            $jwt = JWT::encode($data,$key);
+            $jwt = JWT::encode($data,$key,array('HS256'));
 //            返回json数据
             echo json_encode([
                 'code'=>'200',
-                'jwt'=>$jwt,
+                'ACCESS_TOKEN'=>$jwt,
             ]);
         }else{
             echo json_encode([
@@ -51,6 +55,14 @@ class UserController extends Controller
                 'error'=>'邮箱或者密码错误！',
             ]);
         }
+    }
+
+//    根据用户id获取用户信息
+    public function getUserById(Request $request){
+        $userId = $request->userId;
+        $user = new User();
+        $data = $user->getUserInfoById($userId);
+        return $data;
     }
 
     /**

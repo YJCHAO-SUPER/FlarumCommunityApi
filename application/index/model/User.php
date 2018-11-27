@@ -21,4 +21,14 @@ class User extends Model
     public function contrastLogin($email){
         return User::where('email',$email)->find();
     }
+
+//    联表 获取一个用户对应的文章
+    public function getTopicByUserId(){
+        return $this->hasMany('app\\index\\model\\Article','user_id','id')->with(['getCategoryByArticleId']);
+    }
+
+//    根据用户id获取用户信息
+    public function getUserInfoById($userId){
+        return User::with(['getTopicByUserId'])->where('id',$userId)->find();
+    }
 }

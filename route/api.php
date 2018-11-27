@@ -34,5 +34,20 @@ Route::post('/sendLoginInfo','UserController/doLogin')
 Route::post('/sendTopicInfo','ArticleController/addTopic')
     ->header('Access-Control-Allow-Origin','http://localhost:8080')
     ->header('Access-Control-Allow-Credentials', 'true')
+    ->allowCrossDomain(true)
+    ->middleware('\app\http\middleware\JwtMiddleware');
+
+//接收某篇话题的id 获取这篇话题的内容
+Route::get('/getTopicByIdInfo','ArticleController/getTopicById')
+    ->header('Access-Control-Allow-Origin','http://localhost:8080')
+    ->header('Access-Control-Allow-Credentials', 'true')
     ->allowCrossDomain(true);
+
+//用户id获取用户信息
+Route::get('/getUserInfoById','UserController/getUserById')
+    ->header('Access-Control-Allow-Origin','http://localhost:8080')
+    ->header('Access-Control-Allow-Credentials', 'true')
+    ->allowCrossDomain(true);
+
+
 
