@@ -31,4 +31,36 @@ class User extends Model
     public function getUserInfoById($userId){
         return User::with(['getTopicByUserId'])->where('id',$userId)->find();
     }
+
+//    根据id 获取当前登录用户信息
+    public function getUserPasswordInfo($userId){
+        return User::where('id',$userId)->find();
+    }
+
+//    修改用户密码
+    public function editPassword($userId,$newPassword){
+        $user = new User;
+        $user->save([
+            'password' => $newPassword
+        ],['id'=>$userId]);
+    }
+
+//      修改用户邮箱
+    public function editEmail($userId,$newEmail){
+        $user = new User;
+        $user->save([
+            'email' => $newEmail
+        ],['id'=>$userId]);
+    }
+
+//    修改用户头像
+    public function setNewAvatar($userId,$newAvatar){
+        $user = new User;
+        $user->save([
+            'avatar' => $newAvatar
+        ],['id' => $userId]);
+        return $user->avatar;
+    }
+
+
 }

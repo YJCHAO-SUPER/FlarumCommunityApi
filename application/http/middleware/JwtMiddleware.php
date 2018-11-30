@@ -18,7 +18,6 @@ class JwtMiddleware
             $jwt = JWT::decode($jwt, $key,array('HS256'));
             // 把解析出来的数据保存到 Request 对象中的 jwt 属性上，将来在控制器中就可能 $req->jwt 这样来获取了
             $request->jwt = $jwt;
-
             // 继续执行下一个中间件
             return $next($request);
         }

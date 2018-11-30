@@ -49,5 +49,32 @@ Route::get('/getUserInfoById','UserController/getUserById')
     ->header('Access-Control-Allow-Credentials', 'true')
     ->allowCrossDomain(true);
 
+//获取用户修改密码的信息
+Route::post('/sendChangePassword','UserController/updatePassword')
+    ->header('Access-Control-Allow-Origin','http://localhost:8080')
+    ->header('Access-Control-Allow-Credentials', 'true')
+    ->allowCrossDomain(true)
+    ->middleware('\app\http\middleware\JwtMiddleware');
+
+//获取用户修改密码的信息
+Route::post('/sendChangeEmail','UserController/updateEmail')
+    ->header('Access-Control-Allow-Origin','http://localhost:8080')
+    ->header('Access-Control-Allow-Credentials', 'true')
+    ->allowCrossDomain(true)
+    ->middleware('\app\http\middleware\JwtMiddleware');
+
+//修改用户头像
+Route::post('/uploadAvatar','UserController/updateAvatar')
+    ->header('Access-Control-Allow-Origin','http://localhost:8080')
+    ->header('Access-Control-Allow-Credentials', 'true')
+    ->allowCrossDomain(true)
+    ->middleware('\app\http\middleware\JwtMiddleware');
+
+//检查用户信息
+Route::post('/doCheckLogin','UserController/checkUserLogin')
+    ->header('Access-Control-Allow-Origin','http://localhost:8080')
+    ->header('Access-Control-Allow-Credentials', 'true')
+    ->allowCrossDomain(true)
+    ->middleware('\app\http\middleware\JwtMiddleware');
 
 

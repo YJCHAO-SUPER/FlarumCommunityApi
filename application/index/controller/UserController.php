@@ -43,11 +43,14 @@ class UserController extends Controller
               'email' => $userInfo['email'],
             ];
 //            生成令牌
-            $jwt = JWT::encode($data,$key,array('HS256'));
+            $jwt = JWT::encode($data,$key);
 //            返回json数据
             echo json_encode([
                 'code'=>'200',
                 'ACCESS_TOKEN'=>$jwt,
+                'id'=>$userInfo['id'],
+                'name' => $userInfo['name'],
+                'avatar' => $userInfo['avatar'],
             ]);
         }else{
             echo json_encode([
@@ -63,6 +66,92 @@ class UserController extends Controller
         $user = new User();
         $data = $user->getUserInfoById($userId);
         return $data;
+    }
+
+//    更新用户密码
+    public function updatePassword(Request $request){
+
+        $userId = $request->jwt->id;
+
+        $user = new User();
+        $data = $user->getUserPasswordInfo($userId);
+
+        $oldPassword = $request->oldPassword;
+        $password = password_verify($oldPassword,$data->password);
+//        return $password?"1":"0";
+        $newPassword = password_hash($request->newPassword,1);
+        if($password){
+            $user->editPassword($userId,$newPassword);
+            echo json_encode([
+                'code'=>'200',
+                'msg'=>'密码修改成功！',
+            ]);
+        }else{
+            echo json_encode([
+                'code'=>'403',
+                'msg'=>'原密码错误！',
+            ]);
+        }
+
+    }
+
+//    更新用户邮箱
+    public function updateEmail(Request $request){
+
+        $userId = $request->jwt->id;
+
+        $user = new User();
+        $data = $user->getUserPasswordInfo($userId);
+
+        $oldEmail = $request->oldEmail;
+        $email = $data->email;
+        $newEmail = $request->newEmail;
+        if($oldEmail == $email){
+            $user->editEmail($userId,$newEmail);
+            echo json_encode([
+                'code'=>'200',
+                'msg'=>'邮箱修改成功！',
+            ]);
+        }else{
+            echo json_encode([
+                'code'=>'403',
+                'msg'=>'原邮箱错误！',
+            ]);
+        }
+
+    }
+
+//    更新用户头像
+    public function updateAvatar(Request $request){
+
+        $userId = $request->jwt->id;
+
+        $user = new User();
+        $userInfo = $user->getUserPasswordInfo($userId);
+
+        unlink(ROOT_PATH."/public/".$userInfo->avatar);
+
+        $avatar = $request->file('avatar');
+        $info = $avatar->move(ROOT_PATH."/public/uploads/");
+        $newAvatar = '/uploads/'.$info->getSaveName();
+
+        $data = $user->setNewAvatar($userId,$newAvatar);
+
+        return $data;
+
+    }
+
+//    检查用户信息
+    public function checkUserLogin(Request $request){
+        $jwtToken = $request->jwtToken;
+        $key = 'abcd1234';
+        $jwt = JWT::decode($jwtToken, $key,array('HS256'));
+
+        return json_encode([
+            'avatar' => $jwt->avatar,
+            'id' => $jwt->id,
+            'name' => $jwt->name
+        ]);
     }
 
     /**
