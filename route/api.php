@@ -77,4 +77,10 @@ Route::post('/doCheckLogin','UserController/checkUserLogin')
     ->allowCrossDomain(true)
     ->middleware('\app\http\middleware\JwtMiddleware');
 
+//根据话题id 获取对应的回复
+Route::get('/getReplyByTopicId','ReplyController/getAllReplyByTopicId')
+    ->header('Access-Control-Allow-Origin','http://localhost:8080')
+    ->header('Access-Control-Allow-Credentials', 'true')
+    ->allowCrossDomain(true);
+
 
