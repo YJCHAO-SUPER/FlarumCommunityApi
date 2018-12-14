@@ -18,6 +18,34 @@ class ReplyController extends Controller
 
     }
 
+//    添加话题回复
+    public function addTopicReply(Request $request){
+        $topicId = $request->topicId;
+        $replyContent = $request->replyContent;
+        $replyWithId = $request->replyWithId;
+        $userId = $request->jwt->id;
+        $time = date('Y-m-d h:i:s');
+
+        $reply = new Reply();
+        $newReplyId = $reply->createReply($userId,$topicId,$replyContent,$time,$replyWithId);
+
+        if($newReplyId){
+            echo json_encode([
+                'topicId' => $newReplyId,
+                'code' => 200,
+                'state' => true,
+                'msg' => '回复成功'
+            ]);
+        }else{
+            echo json_encode([
+                'code' => 400,
+                'state' => false,
+                'msg' => '回复失败，请重新回复~'
+            ]);
+        }
+
+    }
+
 
     /**
      * 显示资源列表

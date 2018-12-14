@@ -83,4 +83,11 @@ Route::get('/getReplyByTopicId','ReplyController/getAllReplyByTopicId')
     ->header('Access-Control-Allow-Credentials', 'true')
     ->allowCrossDomain(true);
 
+//添加话题回复
+Route::post('/addReply','ReplyController/addTopicReply')
+    ->header('Access-Control-Allow-Origin','http://localhost:8080')
+    ->header('Access-Control-Allow-Credentials', 'true')
+    ->allowCrossDomain(true)
+    ->middleware('\app\http\middleware\JwtMiddleware');
+
 
