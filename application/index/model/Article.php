@@ -17,9 +17,14 @@ class Article extends Model
         return $this->belongsTo('app\\index\\model\\Category','category_id','id');
     }
 
+//    根据话题id获取话题总数
+    public function getTopicTotal(){
+        return $this->hasMany('app\\index\\model\\Reply','topic_id','id');
+    }
+
 //    获取文章信息的接口
     public function getArticleInfo(){
-        return Article::with(['getUserByArticleId','getCategoryByArticleId'])->all();
+        return Article::with(['getUserByArticleId','getCategoryByArticleId','getTopicTotal'])->order('created_at desc')->select();
     }
 
 //    添加话题
