@@ -3,6 +3,7 @@
 namespace app\index\model;
 
 use think\Model;
+use think\Request;
 
 class Reply extends Model
 {
@@ -26,6 +27,28 @@ class Reply extends Model
         $newReply->reply_with = $replyWithId;
         $newReply->save();
         return $newReply->id;
+    }
+
+    //根据回复id获取回复内容
+    public function getContentById($editReplyId){
+        return Reply::where('id',$editReplyId)->find();
+    }
+
+    //编辑回复
+    public function createEditReply($replyId,$userId,$topicId,$replyEditContent,$time,$replyWithId){
+        $editReply = Reply::where('id', $replyId)->find();
+        $editReply->user_id = $userId;
+        $editReply->topic_id = $topicId;
+        $editReply->reply_content = $replyEditContent;
+        $editReply->created_at = $time;
+        $editReply->reply_with = $replyWithId;
+        $editReply->save();
+        return $editReply->id;
+    }
+
+    //删除回复
+    public function deleteReplyById($replyId){
+        return Reply::where('id',$replyId)->delete();
     }
 
 

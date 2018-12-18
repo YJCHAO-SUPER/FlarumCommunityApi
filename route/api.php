@@ -90,4 +90,29 @@ Route::post('/addReply','ReplyController/addTopicReply')
     ->allowCrossDomain(true)
     ->middleware('\app\http\middleware\JwtMiddleware');
 
+//根据回复id获取回复内容
+Route::get('/getShowEditReply','ReplyController/getEditReplyById')
+    ->header('Access-Control-Allow-Origin','http://localhost:8080')
+    ->header('Access-Control-Allow-Credentials', 'true')
+    ->allowCrossDomain(true);
+
+//编辑回复
+Route::post('/editReply','ReplyController/EditReply')
+    ->header('Access-Control-Allow-Origin','http://localhost:8080')
+    ->header('Access-Control-Allow-Credentials', 'true')
+    ->allowCrossDomain(true)
+    ->middleware('\app\http\middleware\JwtMiddleware');
+
+//删除回复
+Route::get('/deleteReplyById','ReplyController/deleteReply')
+    ->header('Access-Control-Allow-Origin','http://localhost:8080')
+    ->header('Access-Control-Allow-Credentials', 'true')
+    ->allowCrossDomain(true);
+
+//根据id 获取文章内容
+Route::get('/getTopicById','ArticleController/getTopicById')
+    ->header('Access-Control-Allow-Origin','http://localhost:8080')
+    ->header('Access-Control-Allow-Credentials', 'true')
+    ->allowCrossDomain(true);
+
 
