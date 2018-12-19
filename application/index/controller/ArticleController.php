@@ -23,24 +23,47 @@ class ArticleController extends Controller
         $title = $request->title;
         $topicContent = $request->topicContent;
         $createdAt = date('Y-m-d h:i:s');
-//        return $userId;
-        $topic = new Article();
-        $topicId = $topic->createTopic($userId,$categoryId,$title,$topicContent,$createdAt);
+        $editTopic = $request->editTopicId;
 
-        if($topicId){
-            echo json_encode([
-              'topicId' => $topicId,
-              'code' => 200,
-              'state' => true,
-              'msg' => '话题发表成功'
-            ]);
+        if($editTopic){
+            $updateTopic = new Article();
+            $topicEditId = $updateTopic->updateArticle($editTopic,$userId,$categoryId,$title,$topicContent,$createdAt);
+
+            if($topicEditId){
+                echo json_encode([
+                    'topicId' => $topicEditId,
+                    'code' => 200,
+                    'state' => true,
+                    'msg' => '话题修改成功'
+                ]);
+            }else{
+                echo json_encode([
+                    'code' => 400,
+                    'state' => false,
+                    'msg' => '话题修改失败'
+                ]);
+            }
+
         }else{
-            echo json_encode([
-                'code' => 400,
-                'state' => false,
-                'msg' => '话题发表失败'
-            ]);
+            $topic = new Article();
+            $topicId = $topic->createTopic($userId,$categoryId,$title,$topicContent,$createdAt);
+
+            if($topicId){
+                echo json_encode([
+                    'topicId' => $topicId,
+                    'code' => 200,
+                    'state' => true,
+                    'msg' => '话题发表成功'
+                ]);
+            }else{
+                echo json_encode([
+                    'code' => 400,
+                    'state' => false,
+                    'msg' => '话题发表失败'
+                ]);
+            }
         }
+
     }
 
 //    根据id获取话题
@@ -50,6 +73,19 @@ class ArticleController extends Controller
         $article = new Article();
         $data = $article->getArticleById($topicId);
         return $data;
+    }
+
+//    删除话题
+    public function deleteTopic(Request $request){
+        $topicId = $request->topicId;
+        $article = new Article();
+        $article->delTopic($topicId);
+
+        echo json_encode([
+            'code' => 200,
+            'state' => true,
+            'msg' => '话题删除成功'
+        ]);
     }
 
 //

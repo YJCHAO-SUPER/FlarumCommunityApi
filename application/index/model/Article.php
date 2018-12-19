@@ -45,5 +45,28 @@ class Article extends Model
         return Article::with(['getUserByArticleId','getCategoryByArticleId'])->where('id',$topicId)->find();
     }
 
+//    编辑话题
+    public function updateArticle($editTopic,$userId,$categoryId,$title,$topicContent,$createdAt){
+        $topic = Article::where('id',$editTopic)->find();
+        $topic->user_id = $userId;
+        $topic->category_id = $categoryId;
+        $topic->title = $title;
+        $topic->content = $topicContent;
+        $topic->created_at = $createdAt;
+        $topic->save();
+        return $topic->id;
+    }
+
+//    删除话题
+    public function delTopic($topicId){
+        $topic = Article::where('id',$topicId)->find();
+        $replyArr = Reply::where('topic_id',$topic->id)->all();
+        $topic->delete();
+        foreach ($replyArr as $v){
+            $v->delete();
+        }
+
+    }
+
 
 }

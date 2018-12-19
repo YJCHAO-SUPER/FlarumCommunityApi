@@ -115,4 +115,10 @@ Route::get('/getTopicById','ArticleController/getTopicById')
     ->header('Access-Control-Allow-Credentials', 'true')
     ->allowCrossDomain(true);
 
+//删除话题
+Route::get('/delTopic','ArticleController/deleteTopic')
+    ->header('Access-Control-Allow-Origin','http://localhost:8080')
+    ->header('Access-Control-Allow-Credentials', 'true')
+    ->allowCrossDomain(true);
+
 
